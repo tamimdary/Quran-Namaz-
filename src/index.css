@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Amiri", serif;
+  --font-sans: "Hind Siliguri", "Poppins", sans-serif;
+  --font-amiri: "Amiri", serif;
+  --font-bengali: "Hind Siliguri", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+  
+  --color-bg-brand: var(--brand-bg);
+  --color-primary-brand: var(--brand-primary);
+  --color-gold-brand: var(--brand-gold);
+  --color-text-brand: var(--brand-text);
+  --color-card-brand: var(--brand-card);
+}
+
+:root {
+  --brand-bg: #FAF8F3;
+  --brand-primary: #1B6B3A;
+  --brand-gold: #C9A227;
+  --brand-text: #1A1A1A;
+  --brand-card: #FFFFFF;
+}
+
+:root.dark {
+  --brand-bg: #0D1B2A;
+  --brand-primary: #2ECC71;
+  --brand-gold: #F0C040;
+  --brand-text: #F0F0F0;
+  --brand-card: #1A2A3A;
+}
+
+body {
+  background-color: var(--brand-bg);
+  color: var(--brand-text);
+  font-family: "Hind Siliguri", "Poppins", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Disable all animations, transitions, and transforms per FIX 5 */
+* {
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+/* FIX 1: Strict contrast text colors for Day/Night modes */
+:root:not(.dark) {
+  --brand-text: #1A1A1A !important;
+  --brand-bg: #FAF8F3 !important;
+  --brand-card: #FFFFFF !important;
+}
+
+:root.dark {
+  --brand-text: #F0F0F0 !important;
+  --brand-bg: #0D1B2A !important;
+  --brand-card: #1A2A3A !important;
+}
+
+:root:not(.dark) .text-white,
+:root:not(.dark) .text-slate-50,
+:root:not(.dark) .text-slate-100,
+:root:not(.dark) .text-slate-200,
+:root:not(.dark) .text-slate-300,
+:root:not(.dark) .text-slate-400,
+:root:not(.dark) .text-gray-50,
+:root:not(.dark) .text-gray-100,
+:root:not(.dark) .text-gray-200,
+:root:not(.dark) .text-gray-300,
+:root:not(.dark) .text-gray-400,
+:root:not(.dark) .text-zinc-50,
+:root:not(.dark) .text-zinc-100,
+:root:not(.dark) .text-zinc-200,
+:root:not(.dark) .text-zinc-300,
+:root:not(.dark) .text-zinc-400 {
+  color: #1A1A1A !important;
+}
+
+:root.dark .text-black,
+:root.dark .text-slate-700,
+:root.dark .text-slate-800,
+:root.dark .text-slate-900,
+:root.dark .text-gray-700,
+:root.dark .text-gray-800,
+:root.dark .text-gray-900,
+:root.dark .text-zinc-700,
+:root.dark .text-zinc-800,
+:root.dark .text-zinc-900 {
+  color: #F0F0F0 !important;
+}
+
+/* Islamic Geometric Repeating Pattern */
+.islamic-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0 L34 20 L50 16 L40 30 L50 44 L34 40 L30 60 L26 40 L10 44 L20 30 L10 16 L26 20 Z' fill='none' stroke='%23C9A227' stroke-width='0.4' stroke-opacity='0.12'/%3E%3Ccircle cx='30' cy='30' r='4' fill='none' stroke='%23C9A227' stroke-width='0.4' stroke-opacity='0.15'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+:root.dark .islamic-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0 L34 20 L50 16 L40 30 L50 44 L34 40 L30 60 L26 40 L10 44 L20 30 L10 16 L26 20 Z' fill='none' stroke='%23F0C040' stroke-width='0.4' stroke-opacity='0.08'/%3E%3Ccircle cx='30' cy='30' r='4' fill='none' stroke='%23F0C040' stroke-width='0.4' stroke-opacity='0.1'/%3E%3C/svg%3E");
+}
+
+/* Glassmorphism Styles */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+:root.dark .glass-effect {
+  background: rgba(26, 42, 58, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Gold Shimmer Buttons */
+.gold-shimmer-btn {
+  background: linear-gradient(90deg, #C9A227 0%, #E6C250 50%, #C9A227 100%);
+  background-size: 100% auto;
+}
+
+:root.dark .gold-shimmer-btn {
+  background: linear-gradient(90deg, #F0C040 0%, #FFE380 50%, #F0C040 100%);
+  background-size: 100% auto;
+}
+
+/* Disable scrollbar but allow scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

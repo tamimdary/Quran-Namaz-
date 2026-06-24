@@ -1,0 +1,6 @@
+{
+  "name": "নূরের পথ",
+  "description": "নূরের পথ - আলোর পথে চলো। ইসলাম ও সঠিক পথের সন্ধান পেতে কুরআন, হাদিস, নামাজ ও দোয়া শিক্ষা এবং দিকনির্দেশনা।",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

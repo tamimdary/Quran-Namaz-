@@ -1,0 +1,24 @@
+{
+  "name": "নূরের পথ",
+  "short_name": "নূরের পথ",
+  "description": "আলোর পথে চলো - কুরআন, হাদিস ও ইসলামিক দিকনির্দেশক",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D1B2A",
+  "theme_color": "#0D1B2A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=192",
+      "type": "image/jpg",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=512",
+      "type": "image/jpg",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
