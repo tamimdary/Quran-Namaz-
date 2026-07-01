@@ -130,35 +130,22 @@ export default function QuranView({ lang }: QuranViewProps) {
       audioRef.current.pause();
     }
 
-    // Parallel calls: Arabic + Bengali Translation + English Translation
-    const arabicUrl = `https://api.alquran.cloud/v1/surah/${surah.number}/quran-uthmani`;
-    const bnMeaningUrl = `https://api.alquran.cloud/v1/surah/${surah.number}/bn.bengali`;
-    const enMeaningUrl = `https://api.alquran.cloud/v1/surah/${surah.number}/en.asad`;
+    // Fetch from our full-stack Express backend API for accurate translation and pronunciation
+    const customApiUrl = `/api/quran/surah/${surah.number}`;
 
-    Promise.all([
-      fetch(arabicUrl).then((r) => r.json()),
-      fetch(bnMeaningUrl).then((r) => r.json()),
-      fetch(enMeaningUrl).then((r) => r.json())
-    ])
-      .then(([arData, bnData, enData]) => {
-        if (arData?.data?.ayahs && bnData?.data?.ayahs && enData?.data?.ayahs) {
-          const combined: AyahItem[] = arData.data.ayahs.map((arAyah: any, idx: number) => {
-            const bnAyah = bnData.data.ayahs[idx];
-            const enAyah = enData.data.ayahs[idx];
-            return {
-              number: arAyah.number,
-              numberInSurah: arAyah.numberInSurah,
-              text: arAyah.text,
-              bengaliMeaning: bnAyah?.text || "",
-              englishMeaning: enAyah?.text || "",
-              // Use bn.bengali as requested for simple Bengali pronunciation (FIX 3)
-              pronunciation: bnAyah?.text || ""
-            };
-          });
-          setSelectedSurahAyahs(combined);
+    fetch(customApiUrl)
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error("হাদিস ও কুরআন ডাটা লোড ব্যর্থ হয়েছে");
+        }
+        return r.json();
+      })
+      .then((data: AyahItem[]) => {
+        if (Array.isArray(data)) {
+          setSelectedSurahAyahs(data);
           setViewMode("surahDetail");
         } else {
-          throw new Error("Data parsing failed");
+          throw new Error("Data format invalid");
         }
       })
       .catch((err) => {

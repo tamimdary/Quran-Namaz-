@@ -102,3 +102,44 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ==========================================
+   Day/Night Theme Dynamic Contrast Overrides
+   ========================================== */
+
+/* 1. Day Mode (Light Theme): Overrides light/white text inside elements with bg-card-brand to make them dark and highly readable */
+:root:not(.dark) .bg-card-brand .text-white,
+:root:not(.dark) .bg-card-brand .text-slate-50,
+:root:not(.dark) .bg-card-brand .text-slate-100,
+:root:not(.dark) .bg-card-brand .text-slate-200,
+:root:not(.dark) .bg-card-brand .text-slate-300,
+:root:not(.dark) .bg-card-brand .text-slate-400,
+:root:not(.dark) .bg-card-brand .text-gray-50,
+:root:not(.dark) .bg-card-brand .text-gray-100,
+:root:not(.dark) .bg-card-brand .text-gray-200,
+:root:not(.dark) .bg-card-brand .text-gray-300,
+:root:not(.dark) .bg-card-brand .text-gray-400,
+:root:not(.dark) .bg-card-brand .text-zinc-50,
+:root:not(.dark) .bg-card-brand .text-zinc-100,
+:root:not(.dark) .bg-card-brand .text-zinc-200,
+:root:not(.dark) .bg-card-brand .text-zinc-300,
+:root:not(.dark) .bg-card-brand .text-zinc-400,
+:root:not(.dark) .bg-card-brand [class*="text-white"],
+:root:not(.dark) .bg-card-brand [class*="text-slate-200"],
+:root:not(.dark) .bg-card-brand [class*="text-gray-300"] {
+  color: var(--brand-text) !important;
+}
+
+/* 2. Night Mode (Dark Theme): Overrides dark text inside elements with bg-card-brand to make them light and highly readable */
+:root.dark .bg-card-brand .text-black,
+:root.dark .bg-card-brand .text-slate-800,
+:root.dark .bg-card-brand .text-slate-900,
+:root.dark .bg-card-brand .text-gray-800,
+:root.dark .bg-card-brand .text-gray-900,
+:root.dark .bg-card-brand .text-zinc-800,
+:root.dark .bg-card-brand .text-zinc-900,
+:root.dark .bg-card-brand [class*="text-black"],
+:root.dark .bg-card-brand [class*="text-slate-900"],
+:root.dark .bg-card-brand [class*="text-gray-900"] {
+  color: var(--brand-text) !important;
+}

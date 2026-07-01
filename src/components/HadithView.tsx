@@ -151,7 +151,8 @@ export default function HadithView({ lang }: HadithViewProps) {
     setSearchResults([]);
 
     try {
-      const response = await fetch(book.url);
+      // Fetch Hadiths from our fast Express backend proxy endpoint instead of CDN
+      const response = await fetch(`/api/hadiths?book=${book.id}`);
       if (!response.ok) {
         throw new Error("হাদিস লোড করতে ব্যর্থ হয়েছে। অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করুন।");
       }
