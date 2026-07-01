@@ -35,6 +35,338 @@ function getAiClient() {
 const hadithCache: Record<string, any> = {};
 const quranSurahCache: Record<string, any[]> = {};
 
+// Comprehensive dictionary of common Quranic words with precise, authentic Bengali phonetic pronunciations
+const COMMON_WORD_MAP: Record<string, string> = {
+  // Common terms & names
+  "allah": "আল্লাহ্",
+  "allaah": "আল্লাহ্",
+  "lillah": "লিল্লাহ্",
+  "lillaah": "লিল্লাহ্",
+  "lillaahi": "লিল্লাহি",
+  "bismillah": "বিসমিল্লাহ্",
+  "bismillaah": "বিসমিল্লাহ্",
+  "bismillaahir": "বিসমিল্লাহির",
+  "rahmaan": "রহমান",
+  "rahmaani": "রহমানি",
+  "rahmaanir": "রহমানির",
+  "raheem": "রহীম",
+  "raheemi": "রহীমি",
+  "al-hamdu": "আল-হামদু",
+  "rabb": "রব্ব",
+  "rabbi": "রব্বি",
+  "rabbil": "রব্বিল",
+  "al-ameen": "আল-আমীন",
+  "aalameen": "আলামীন",
+  "maaliki": "মালিকি",
+  "yawm": "ইয়াওম",
+  "yawmid": "ইয়াওমিদ",
+  "deen": "দ্বীন",
+  "deeni": "দ্বীনি",
+  "iyyaaka": "ইয়্যাকা",
+  "na'budu": "নাবুদু",
+  "wa": "ওয়া",
+  "nasta'een": "নাস্তায়ীন",
+  "ihdinas": "ইহদিনাস",
+  "siraat": "সিরাত",
+  "siraatal": "সিরাতাল",
+  "mustaqeem": "মুস্তাকীম",
+  "lazeena": "লাযীনা",
+  "an'amta": "আনামতা",
+  "alayhim": "আলাইহিম",
+  "ghayril": "গাইরিল",
+  "maghdoobi": "মাগদুবী",
+  "lad-daalleen": "লাদ-দাল্লীন",
+  
+  // Pronouns & Prepositions & Common particles
+  "min": "মিন",
+  "minal": "মিনাল",
+  "fi": "ফি",
+  "fee": "ফী",
+  "feehim": "ফীহিম",
+  "feehi": "ফীহি",
+  "la": "লা",
+  "laa": "লা",
+  "ma": "মা",
+  "maa": "মা",
+  "inna": "ইন্না",
+  "innallaha": "ইন্নাল্লাহ্",
+  "innallaaha": "ইন্নাল্লাহ্",
+  "anna": "আন্না",
+  "ala": "আলা",
+  "alaa": "আলা",
+  "bi": "বি",
+  "ilayhi": "ইলাইহি",
+  "ilayhim": "ইলাইহিম",
+  "ila": "ইলা",
+  "ilaa": "ইলা",
+  "an": "আন",
+  "am": "আম",
+  "aw": "আও",
+  "as-samawaati": "আস-সামাওয়াত",
+  "samawaati": "সামাওয়াত",
+  "al-ard": "আল-আরদ্ব",
+  "ard": "আরদ্ব",
+  "irdi": "আরদ্বি",
+  "ardi": "আরদ্বি",
+  "al-ardi": "আল-আরদ্বি",
+  "nas": "নাস",
+  "an-nas": "আন-নাস",
+  "an-naas": "আন-নাস",
+  "naas": "নাস",
+  "minal-jinnati": "মিনাল-জিন্নাতি",
+  "wan-nas": "ওয়ান-নাস",
+  "wan-naas": "ওয়ান-নাস",
+  "qul": "কুল",
+  "ahuuz": "আউযু",
+  "a'oozu": "আউযু",
+  "biraadin": "বিরাব্বিন",
+  "birabbin": "বিরাব্বিন",
+  "malikin": "মালিকিন",
+  "ilaahin": "ইলাহিন",
+  "ilaahi": "ইলাহি",
+  "sharril": "শাররিল",
+  "sharri": "শাররি",
+  "waswaasil": "ওয়াসওয়াসিল",
+  "khannaas": "খান্নাস",
+  "khannas": "খান্নাস",
+  "allazee": "আল্লাযী",
+  "yuwaswisu": "ইউওয়াসউইসু",
+  "fih": "ফী",
+  "sudoorin": "সুদূরিন",
+  "sudoorin-naas": "সুদূরিন-নাস",
+  "jinnati": "জিন্নাতি",
+  "falaj": "ফালাক",
+  "falaq": "ফালাক",
+  "al-falaq": "আল-ফালাক",
+  "khalaq": "খালাক",
+  "ghasiqin": "গাসিকিন",
+  "waqab": "ওয়াক্বাব",
+  "naffaasaati": "নাফফাসাত",
+  "naffasaati": "নাফফাসাত",
+  "uqad": "উক্বদ",
+  "hasidin": "হাসিদিন",
+  "hasad": "হাসাদ",
+  "ahad": "আহাদ",
+  "samad": "সামাদ",
+  "as-samad": "আস-সামাদ",
+  "yalid": "ইয়াদিল",
+  "walam": "ওয়ালাম",
+  "yoolad": "ইউলাদ",
+  "yakun": "ইয়াকুন",
+  "lahu": "লাহু",
+  "kufuwan": "কুফুওয়ান",
+  "ablah": "আবলাহ",
+  "lahab": "লাহাব",
+  "watab": "ওয়াতাব",
+  "aghna": "আগনা",
+  "anhu": "আনহু",
+  "maaluhu": "মালুহু",
+  "kasab": "คাসাব",
+  "yasla": "ইয়াসলা",
+  "naaran": "নারান",
+  "zaata": "যাতা",
+  "imra'atuhu": "ইমরাআতুহু",
+  "hammaalatal": "হাম্মা লাতাল",
+  "hatab": "হাতাব",
+  "jeedihaa": "জীদিহা",
+  "hablum": "হাবলুম",
+  "masad": "মাসাদ",
+  "iza": "ইযা",
+  "izaa": "ইযা",
+  "jaa'a": "জাআ",
+  "nasrullahi": "নাসরুল্লাহি",
+  "nasrullaahi": "নাসরুল্লাহি",
+  "fath": "ফাতহ",
+  "al-fath": "আল-ফাতহ",
+  "ra'aytan": "রাআইতান",
+  "yadkhuloona": "ইয়াদখুলুনা",
+  "deenillahi": "দ্বীনিল্লাহি",
+  "deenillaahi": "দ্বীনিল্লাহি",
+  "afwaajaa": "আফওয়াজা",
+  "afwajan": "আফওয়াজা",
+  "fasabbih": "ফাসাব্বিহ",
+  "bihamdi": "বিহামদি",
+  "wastaghfirh": "ওয়াস্তাগফিরহু",
+  "innahu": "ইন্নাহু",
+  "kaana": "কানা",
+  "tawwaaba": "তাওয়্যাবা",
+  "tawwaabaa": "তাওয়্যাবা",
+  "kawthar": "কাওসার",
+  "al-kawthar": "আল-কাওসার",
+  "a'taynaaka": "আতাইনা-কা",
+  "fasalli": "ফাসাল্লি",
+  "wanhar": "ওয়ানহার",
+  "shaani'aka": "শানিআকা",
+  "huwal": "হুওয়াল",
+  "abtar": "আবতার",
+  "ara'aytallas": "আরাআইতাল্লাযী",
+  "ara'aytallazee": "আরাআইতাল্লাযী",
+  "yukazzibu": "ইউকাযযিবু",
+  "bideen": "বিদ্দীন",
+  "bid-deen": "বিদ্দীন",
+  "fazaalikallas": "ফাযালিকাল্লাযী",
+  "fazaalikallazee": "ফাযালিকাল্লাযী",
+  "yadu''ul-yateem": "ইয়াদুউল ইয়াতীম",
+  "yadu'ul-yateem": "ইয়াদুউল ইয়াতীম",
+  "yateem": "ইয়াতীম",
+  "yahuddu": "ইয়াহuদ্দু",
+  "ta'amil-miskeen": "তাআমিল মিসকীন",
+  "ta'aamil-miskeen": "তাআমিল মিসকীন",
+  "miskeen": "মিসকীন",
+  "fawaylul-lilmussalleen": "ফাওয়াইলুল লিলমুসাল্লীন",
+  "fawaylul-lilmusalleen": "ফাওয়াইলুল লিলমুসাল্লীন",
+  "musalleen": "মুসাল্লীন",
+  "hum": "হুম",
+  "salaatihim": "সালাতিহিম",
+  "sahoon": "সাহুন",
+  "yuraa'oon": "ইউরাউন",
+  "yura'oon": "ইউরাউন",
+  "wayamna'oonal-ma'oon": "ওয়া ইয়ামনাউনাল মাউন",
+  "ma'oon": "মাউন"
+};
+
+function scanWord(s: string): string {
+  let result = "";
+  let isStart = true;
+  
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+    
+    if (char.charCodeAt(0) > 127) {
+      result += char;
+      isStart = false;
+      continue;
+    }
+    
+    if (["a", "i", "u", "o", "e"].includes(char)) {
+      if (isStart) {
+        if (char === "a") result += "আ";
+        else if (char === "i") result += "ই";
+        else if (char === "u") result += "উ";
+        else if (char === "o") result += "ও";
+        else if (char === "e") result += "এ";
+      } else {
+        if (char === "a") result += "া";
+        else if (char === "i") result += "ি";
+        else if (char === "u") result += "u"; // use standard ু sound
+        else if (char === "o") result += "ো";
+        else if (char === "e") result += "ে";
+      }
+      isStart = false;
+    } else {
+      isStart = false;
+      if (char === "b") result += "ব";
+      else if (char === "t") result += "ত";
+      else if (char === "j") result += "জ";
+      else if (char === "h") result += "হ";
+      else if (char === "k") result += "ক";
+      else if (char === "l") result += "ল";
+      else if (char === "m") result += "ম";
+      else if (char === "n") result += "ন";
+      else if (char === "s") result += "স";
+      else if (char === "r") result += "র";
+      else if (char === "f") result += "ফ";
+      else if (char === "q") result += "ক";
+      else if (char === "z") result += "জ";
+      else if (char === "d") result += "দ";
+      else if (char === "g") result += "গ";
+      else if (char === "p") result += "প";
+      else if (char === "v") result += "ভ";
+      else if (char === "w") result += "ওয়";
+      else if (char === "y") result += "য়";
+      else if (char === "'") {
+        // apostrophe, skip
+      } else {
+        result += char;
+        isStart = true;
+      }
+    }
+  }
+  // Standardize vowel markers representation
+  return result.replace(/u/g, "ু");
+}
+
+function transliteratePhoneticWord(word: string): string {
+  if (!word) return "";
+  
+  let res = word;
+  
+  res = res.replace(/iyya/g, "িয়্যা");
+  res = res.replace(/iy/g, "িয়");
+  res = res.replace(/ya/g, "িয়া");
+  res = res.replace(/yu/g, "ইউ");
+  res = res.replace(/yi/g, "িয়ি");
+  res = res.replace(/yo/g, "ইয়ো");
+  res = res.replace(/wa/g, "ওয়া");
+  res = res.replace(/wu/g, "উ");
+  res = res.replace(/wi/g, "উই");
+  
+  res = res.replace(/kh/g, "খ");
+  res = res.replace(/sh/g, "শ");
+  res = res.replace(/gh/g, "গ");
+  res = res.replace(/th/g, "ছ");
+  res = res.replace(/dh/g, "য");
+  res = res.replace(/zh/g, "য");
+  res = res.replace(/ph/g, "ফ");
+  res = res.replace(/ch/g, "চ");
+  
+  res = res.replace(/bb/g, "ব্ব");
+  res = res.replace(/tt/g, "ত্ত");
+  res = res.replace(/dd/g, "দ্দ");
+  res = res.replace(/ff/g, "ফফ");
+  res = res.replace(/kk/g, "ক্ক");
+  res = res.replace(/ll/g, "ল্ল");
+  res = res.replace(/mm/g, "ম্ম");
+  res = res.replace(/nn/g, "ন্ন");
+  res = res.replace(/ss/g, "স্স");
+  res = res.replace(/rr/g, "র্র");
+  res = res.replace(/zz/g, "জ্জ");
+  
+  res = res.replace(/ee/g, "ী");
+  res = res.replace(/oo/g, "ূ");
+  res = res.replace(/aa/g, "া");
+  
+  res = res.replace(/ay/g, "ায়");
+  res = res.replace(/aw/g, "াও");
+  res = res.replace(/ai/g, "াই");
+  res = res.replace(/au/g, "াউ");
+  
+  return scanWord(res);
+}
+
+function convertToBengaliPronunciation(englishTransliteration: string): string {
+  if (!englishTransliteration) return "";
+  
+  const text = englishTransliteration.trim();
+  const words = text.split(/\s+/);
+  
+  const convertedWords = words.map(word => {
+    const match = word.match(/^([^\w'-]*)([\w'-]+)([^\w'-]*)$/);
+    if (!match) return word;
+    
+    const prefix = match[1];
+    let core = match[2].toLowerCase();
+    const suffix = match[3];
+    
+    if (COMMON_WORD_MAP[core]) {
+      return prefix + COMMON_WORD_MAP[core] + suffix;
+    }
+    
+    if (core.includes("-")) {
+      const parts = core.split("-");
+      const convertedParts = parts.map(part => {
+        if (COMMON_WORD_MAP[part]) return COMMON_WORD_MAP[part];
+        return transliteratePhoneticWord(part);
+      });
+      return prefix + convertedParts.join("-") + suffix;
+    }
+    
+    return prefix + transliteratePhoneticWord(core) + suffix;
+  });
+  
+  return convertedWords.join(" ");
+}
+
 // API proxy for Hadiths to resolve slow/failing jsdelivr load on mobile client
 app.get("/api/hadiths", async (req, res) => {
   try {
@@ -66,7 +398,7 @@ app.get("/api/hadiths", async (req, res) => {
   }
 });
 
-// API proxy for Quran Surah details, featuring automatic high-quality Bengali Pronunciation (উচ্চারণ) generation via Gemini 3.5 Flash
+// API proxy for Quran Surah details, featuring automatic high-quality Bengali Pronunciation (উচ্চারণ) generation via local phonetic engine
 app.get("/api/quran/surah/:number", async (req, res) => {
   const surahNumber = req.params.number;
   try {
@@ -96,80 +428,23 @@ app.get("/api/quran/surah/:number", async (req, res) => {
     const enAyahs = enRes.data.ayahs;
     const transAyahs = transRes.data.ayahs;
 
-    const combined: any[] = [];
-    const chunkSize = 30; // Batch into sizes of 30 to stay within limits and ensure quick streaming
+    const combined: any[] = arAyahs.map((arAyah: any, idx: number) => {
+      const bnAyah = bnAyahs[idx];
+      const enAyah = enAyahs[idx];
+      const transAyah = transAyahs[idx];
 
-    for (let i = 0; i < arAyahs.length; i += chunkSize) {
-      const arChunk = arAyahs.slice(i, i + chunkSize);
-      const transChunk = transAyahs.slice(i, i + chunkSize);
+      const englishTrans = transAyah?.text || "";
+      const pronunciation = convertToBengaliPronunciation(englishTrans);
 
-      const prompt = `You are an expert Islamic scholar and Arabic-to-Bengali phonetician.
-I have a list of Quranic verses for Surah ${surahNumber}.
-For each verse, I provide the Arabic text and the English transliteration.
-Please generate the exact, standard Bengali phonetic pronunciation (উচ্চারণ) for each verse.
-Ensure it is written in standard, beautiful Bengali script that Bengali speakers traditionally use to read Quranic verses phonetically.
-Ensure your response is valid JSON matching this schema:
-{
-  "pronunciations": [
-    { "numberInSurah": 1, "pronunciation": "বাংলা উচ্চারণ এখানে লিখুন" }
-  ]
-}
-
-Input Verses:
-${arChunk.map((ar: any, idx: number) => `Verse ${ar.numberInSurah}:
-Arabic: ${ar.text}
-English Transliteration: ${transChunk[idx]?.text || ""}`).join("\n\n")}
-
-ONLY return the JSON object, do not write any markdown code block formatting or explanations.`;
-
-      const ai = getAiClient();
-      const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-        }
-      });
-
-      const responseText = response.text ? response.text.trim() : "";
-      let jsonParsed: any = { pronunciations: [] };
-      try {
-        jsonParsed = JSON.parse(responseText);
-      } catch (e) {
-        console.warn("Retrying JSON cleanup for Gemini pronunciation response...");
-        const cleanText = responseText.replace(/```json|```/g, "").trim();
-        jsonParsed = JSON.parse(cleanText);
-      }
-
-      const pronunciationMap = new Map<number, string>();
-      if (Array.isArray(jsonParsed.pronunciations)) {
-        for (const p of jsonParsed.pronunciations) {
-          pronunciationMap.set(p.numberInSurah, p.pronunciation);
-        }
-      }
-
-      for (let j = 0; j < arChunk.length; j++) {
-        const globalIdx = i + j;
-        const arAyah = arAyahs[globalIdx];
-        const bnAyah = bnAyahs[globalIdx];
-        const enAyah = enAyahs[globalIdx];
-        const transAyah = transAyahs[globalIdx];
-
-        let pronunciation = pronunciationMap.get(arAyah.numberInSurah) || "";
-        if (!pronunciation) {
-          pronunciation = transAyah?.text || bnAyah?.text || "";
-        }
-
-        combined.push({
-          number: arAyah.number,
-          numberInSurah: arAyah.numberInSurah,
-          text: arAyah.text,
-          bengaliMeaning: bnAyah?.text || "",
-          englishMeaning: enAyah?.text || "",
-          pronunciation: pronunciation
-        });
-      }
-    }
+      return {
+        number: arAyah.number,
+        numberInSurah: arAyah.numberInSurah,
+        text: arAyah.text,
+        bengaliMeaning: bnAyah?.text || "",
+        englishMeaning: enAyah?.text || "",
+        pronunciation: pronunciation
+      };
+    });
 
     quranSurahCache[surahNumber] = combined;
     res.json(combined);
@@ -192,14 +467,18 @@ ONLY return the JSON object, do not write any markdown code block formatting or 
       const fallbackCombined = arRes.data.ayahs.map((arAyah: any, idx: number) => {
         const bnAyah = bnRes.data.ayahs[idx];
         const enAyah = enRes.data.ayahs[idx];
-        const transAyah = transRes.data.ayahs[idx];
+        const transAyah = transAyahs[idx];
+        
+        const englishTrans = transAyah?.text || "";
+        const pronunciation = convertToBengaliPronunciation(englishTrans) || englishTrans;
+
         return {
           number: arAyah.number,
           numberInSurah: arAyah.numberInSurah,
           text: arAyah.text,
           bengaliMeaning: bnAyah?.text || "",
           englishMeaning: enAyah?.text || "",
-          pronunciation: transAyah?.text || bnAyah?.text || ""
+          pronunciation: pronunciation
         };
       });
       res.json(fallbackCombined);
