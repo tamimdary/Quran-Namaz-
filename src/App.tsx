@@ -67,13 +67,13 @@ export default function App() {
       case 1:
         return <HadithView lang={lang} />;
       case 2:
-        return <HomeDashboardView key="dashboard" onNavigateToTab={setActiveTab} />;
+        return <HomeDashboardView key="dashboard" lang={lang} onNavigateToTab={setActiveTab} />;
       case 3:
-        return <PrayerTimesView key="prayer" />;
+        return <PrayerTimesView lang={lang} />;
       case 4:
         return <MoreView key="more" lang={lang} onChangeLang={setLang} onNavigateToTab={setActiveTab} />;
       default:
-        return <HomeDashboardView key="dashboard" onNavigateToTab={setActiveTab} />;
+        return <HomeDashboardView key="dashboard" lang={lang} onNavigateToTab={setActiveTab} />;
     }
   };
 

@@ -38,10 +38,43 @@ import {
   Crown,
   ChevronLeft,
   Heart,
-  CheckCircle2
+  CheckCircle2,
+  Settings
 } from "lucide-react";
 import { contactData } from "../data";
 import { motion, AnimatePresence } from "motion/react";
+
+// Helper function to render premium, high-contrast, beautiful vector icons for each module segment
+const renderMoreIcon = (id: string, className: string = "w-5 h-5") => {
+  switch (id) {
+    case "dua":
+      return <Heart className={`${className} stroke-[2.2]`} />;
+    case "tasbih":
+      return <Smile className={`${className} stroke-[2.2]`} />;
+    case "qibla":
+      return <Compass className={`${className} stroke-[2.2]`} />;
+    case "zakat":
+      return <Coins className={`${className} stroke-[2.2]`} />;
+    case "history":
+      return <History className={`${className} stroke-[2.2]`} />;
+    case "ai_assistant":
+      return <Sparkles className={`${className} stroke-[2.2]`} />;
+    case "kids":
+      return <Shield className={`${className} stroke-[2.2]`} />;
+    case "certificate":
+      return <Crown className={`${className} stroke-[2.2]`} />;
+    case "dashboard":
+      return <Activity className={`${className} stroke-[2.2]`} />;
+    case "ramadan":
+      return <Moon className={`${className} stroke-[2.2]`} />;
+    case "gamification":
+      return <Trophy className={`${className} stroke-[2.2]`} />;
+    case "settings":
+      return <Settings className={`${className} stroke-[2.2]`} />;
+    default:
+      return <Sparkles className={`${className} stroke-[2.2]`} />;
+  }
+};
 
 interface ProphetItem {
   id: string;
@@ -354,7 +387,16 @@ interface MoreViewProps {
 
 export default function MoreView({ lang = "bn", onChangeLang, onNavigateToTab }: MoreViewProps) {
   // Navigation segment state of MoreView - defaults to "menu" for the beautiful box grid layout
-  const [activeSegment, setActiveSegment] = useState<"menu" | "dua" | "tasbih" | "qibla" | "zakat" | "history" | "ai_assistant" | "kids" | "certificate" | "dashboard" | "ramadan" | "gamification" | "settings">("menu");
+  const [activeSegment, setActiveSegment] = useState<"menu" | "dua" | "tasbih" | "qibla" | "zakat" | "history" | "ai_assistant" | "kids" | "certificate" | "dashboard" | "ramadan" | "gamification" | "settings">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("more_active_segment");
+      if (saved) {
+        localStorage.removeItem("more_active_segment");
+        return saved as any;
+      }
+    }
+    return "menu";
+  });
 
   // --- CERTIFICATE STATES ---
   const [certName, setCertName] = useState<string>(() => {
@@ -372,9 +414,9 @@ export default function MoreView({ lang = "bn", onChangeLang, onNavigateToTab }:
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("islamic_ast_api_key");
       if (saved) return saved;
-      return ((import.meta as any).env?.VITE_GEMINI_API_KEY as string) || "";
+      return ((import.meta as any).env?.VITE_GEMINI_API_KEY as string) || "server-proxy-mode";
     }
-    return "";
+    return "server-proxy-mode";
   });
   
   const [chatMessages, setChatMessages] = useState<Array<{role: "user" | "model", text: string, reference?: string}>>(() => {
@@ -391,7 +433,7 @@ export default function MoreView({ lang = "bn", onChangeLang, onNavigateToTab }:
     return [
       {
         role: "model",
-        text: "আসসালামু আলাইকুম! আমি 'নূরের পথ' ইসলামিক এআই সহকারী। কোরআন এবং সুন্নাহর আলোকে আপনার যেকোনো ধর্মীয় বা ইসলামিক প্রশ্নের উত্তর দিতে আমি প্রস্তুত। অনুগ্রহ করে নিচে আপনার নিজের Gemini API কি (Key) প্রদান করে বাংলা ভাষায় যেকোনো প্রশ্ন করুন।"
+        text: "আসসালামু আলাইকুম! আমি 'নূরের পথ' ইসলামিক এআই সহকারী। কোরআন এবং সুন্নাহর আলোকে আপনার যেকোনো ধর্মীয় বা ইসলামিক প্রশ্নের উত্তর দিতে আমি প্রস্তুত। বাংলা ভাষায় আপনার যেকোনো প্রশ্ন জিজ্ঞেস করুন।"
       }
     ];
   });
@@ -414,10 +456,6 @@ export default function MoreView({ lang = "bn", onChangeLang, onNavigateToTab }:
 
   const handleSendChatMessage = async () => {
     if (!chatInput.trim() || chatLoading) return;
-    if (!geminiApiKey.trim()) {
-      setChatError("অনুগ্রহ করে প্রথমে আপনার সচল Gemini API Key প্রদান করুন।");
-      return;
-    }
 
     const userText = chatInput.trim();
     setChatInput("");
@@ -434,7 +472,7 @@ export default function MoreView({ lang = "bn", onChangeLang, onNavigateToTab }:
         parts: [{ text: msg.text }]
       }));
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`, {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -1403,8 +1441,8 @@ JSON ফরম্যাটটি নিচের মতো অবশ্যই �
                   <div className="absolute inset-0 border-2 border-transparent group-active:border-gold-brand rounded-2xl pointer-events-none transition-all" />
                   
                   {/* Icon with ambient bg circle */}
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-2 transition-transform group-hover:scale-115 shadow-inner ${item.iconBg}`}>
-                    {item.icon}
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-transform group-hover:scale-115 shadow-inner ${item.iconBg}`}>
+                    {renderMoreIcon(item.id, "w-6 h-6")}
                   </div>
 
                   {/* Label string */}

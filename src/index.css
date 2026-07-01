@@ -38,56 +38,24 @@ body {
   overflow-x: hidden;
 }
 
-/* Disable all animations, transitions, and transforms per FIX 5 */
+/* Premium micro-transitions for standard theme changes */
 * {
-  transition: none !important;
-  animation: none !important;
-  transform: none !important;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
 }
 
-/* FIX 1: Strict contrast text colors for Day/Night modes */
+/* Day/Night Theme Variables */
 :root:not(.dark) {
-  --brand-text: #1A1A1A !important;
-  --brand-bg: #FAF8F3 !important;
-  --brand-card: #FFFFFF !important;
+  --brand-text: #1A1A1A;
+  --brand-bg: #FAF8F3;
+  --brand-card: #FFFFFF;
 }
 
 :root.dark {
-  --brand-text: #F0F0F0 !important;
-  --brand-bg: #0D1B2A !important;
-  --brand-card: #1A2A3A !important;
-}
-
-:root:not(.dark) .text-white,
-:root:not(.dark) .text-slate-50,
-:root:not(.dark) .text-slate-100,
-:root:not(.dark) .text-slate-200,
-:root:not(.dark) .text-slate-300,
-:root:not(.dark) .text-slate-400,
-:root:not(.dark) .text-gray-50,
-:root:not(.dark) .text-gray-100,
-:root:not(.dark) .text-gray-200,
-:root:not(.dark) .text-gray-300,
-:root:not(.dark) .text-gray-400,
-:root:not(.dark) .text-zinc-50,
-:root:not(.dark) .text-zinc-100,
-:root:not(.dark) .text-zinc-200,
-:root:not(.dark) .text-zinc-300,
-:root:not(.dark) .text-zinc-400 {
-  color: #1A1A1A !important;
-}
-
-:root.dark .text-black,
-:root.dark .text-slate-700,
-:root.dark .text-slate-800,
-:root.dark .text-slate-900,
-:root.dark .text-gray-700,
-:root.dark .text-gray-800,
-:root.dark .text-gray-900,
-:root.dark .text-zinc-700,
-:root.dark .text-zinc-800,
-:root.dark .text-zinc-900 {
-  color: #F0F0F0 !important;
+  --brand-text: #F0F0F0;
+  --brand-bg: #0D1B2A;
+  --brand-card: #1A2A3A;
 }
 
 /* Islamic Geometric Repeating Pattern */
